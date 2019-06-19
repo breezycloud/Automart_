@@ -1,3 +1,0 @@
-# automart
-
-Andela Developer Challenge
