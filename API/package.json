@@ -1,0 +1,53 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon  ./server/index",
+    "build": "rm -rf ./build && babel -d ../build ./API -s",
+    "test": "nyc --reporter=html --reporter=text mocha ./Test/ --exit",
+    "create": "node ../API_Endpoint/services/db createTables",
+    "drop": "node ../API_Endpoint/services/db dropTables",
+    "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov npm run test",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "@hapi/joi": "^15.0.3",
+    "babel-eslint": "^10.0.1",
+    "babel-polyfill": "^6.26.0",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "coveralls": "^3.0.4",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "heroku": "^7.25.0",
+    "http": "0.0.0",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "make-runnable": "^1.3.6",
+    "mocha": "^6.1.4",
+    "moment": "^2.24.0",
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1",
+    "pg": "^7.11.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.4.5",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3"
+  }
+}
