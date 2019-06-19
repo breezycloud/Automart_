@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon  ./server/index",
+    "start": "nodemon --exec babel-node --presets @babel/preset-env  ./server/server",
     "build": "rm -rf ./build && babel -d ../build ./API -s",
-    "test": "nyc --reporter=html --reporter=text mocha ./Test/ --exit",
+    "test": "nyc --reporter=html --reporter=text mocha --require @babel/register ../API/Test/*.js --exit",
     "create": "node ../API_Endpoint/services/db createTables",
     "drop": "node ../API_Endpoint/services/db dropTables",
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
@@ -22,6 +22,7 @@
     "@babel/node": "^7.4.5",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/register": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "@hapi/joi": "^15.0.3",
     "babel-eslint": "^10.0.1",
     "babel-polyfill": "^6.26.0",
@@ -45,7 +46,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.4.5",
+    "babel-preset-env": "^1.7.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.3"

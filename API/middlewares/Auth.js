@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import db from '../services/db';
+import { pool } from '../services/db';
 
 class Auth {
   static async verifyToken(req, res, next) {
@@ -9,17 +9,25 @@ class Auth {
     }
     try {
       const decoded = await jwt.verify(token, process.env.SECRET);
-      const text = 'SELECT * FROM users WHERE user_id = $1';
-      const { rows } = await db.query(text, [decoded.userId]);
-      if (!rows[0]) {
-        return res.status(400).send({ message: 'The token you provided is invalid' });
-      }
-      req.user = { id: decoded.userId };
-      next();
-    } catch (error) {
-      return res.status(400).send(error);
+      const qryGetUser = 'SELECT * FROM users WHERE user_id=$1';
+        await pool.connect((err, client, done) => {
+         client.query(qryGetUser, [decoded.userId], (error, result) => {
+           done();
+           if (error) {
+             res.status(400).json({ status: 400, message: error });
+           }    
+           if(!result.rows[0]){
+            return res.status(400).send({ message: 'The token you provided is invalid' });
+           }
+            req.user = { id: decoded.userId };
+            next();
+         });
+       });
+     } 
+     catch (error) {
+       return res.status(400).send(error);
     }
-  }
+  } 
 }
 
 export default Auth;
