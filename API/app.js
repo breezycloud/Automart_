@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/api/v1/auth/signup', userController.createUser);
+app.get('/api/v1/auth/login', userController.userLogin);
 
 app.use('*', (req, res) => res.status(200).json({
   message: 'Welcome Breezy Cloud',
