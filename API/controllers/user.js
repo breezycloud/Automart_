@@ -25,13 +25,15 @@ class userController {
       req.body.email,
       hashPassword,
     ];
+
     try {
-      await pool.connect((err, client, done) => {
+       await pool.connect((err, client, done) => {
         client.query(qryCreateUser, values, (error, result) => {
           done();
           if (error) {
             res.status(400).json({ status: 400, message: error });
           }
+          const token = Helper.generateToken(result.rows[0].user_id);
           const token = Helper.generateToken(result.rows[0]);
           return res.status(201).send({ token, message: 'User created successfully' });
         });
@@ -43,5 +45,43 @@ class userController {
       return res.status(400).send(error);
     }
   }
+
+  static async userLogin(req, res) {
+    if (!req.body.email || !req.body.password) {
+      return res.status(400).send({ message: 'Some values are missing'});
+    }
+    if (!Helper.isValidEmail(req.body.email)) {
+      return res.status(400).send({ message: 'Please enter a valid email address' });
+    }
+    if (!Helper.isValidEmail(req.body.email)) {
+      return res.status(400).send({ message: 'Please enter a valid email address' });
+    }
+
+    const qryGetUser = `SELECT * FROM users WHERE email=$1`;
+    const values = [
+      req.body.email
+    ];
+    try {
+      await pool.connect((err, client, done) => {
+       client.query(qryGetUser, values, (error, result) => {
+         done();
+         if (error) {
+           res.status(400).json({ status: 400, message: error });
+         }
+         else if(!result.rows[0]){
+          return res.status(400).send({'message': 'The credentials you provided is incorrect'});
+         }
+         else if (!Helper.comparePassword(result.rows[0].pwd, req.body.password)) {
+          return res.status(400).send({ message: 'The credentials you provided is incorrect' });
+         }
+         const token = Helper.generateToken(result.rows[0].user_id);
+         return res.status(200).send({ token });
+       });
+     });
+    } catch (error) {
+     return res.status(400).send(error);
+   }
+  }
 }
+
 export default userController;
