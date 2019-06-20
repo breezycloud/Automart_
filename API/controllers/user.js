@@ -27,21 +27,19 @@ class userController {
     ];
     try {
       await pool.connect((err, client, done) => {
-        client.query(qryCreateUser, values, (error, result) => {
-          done();
-          if (error) {
-            res.status(400).json({ status: 400, message: error });
-          }
-          const token = Helper.generateToken(result.rows[0]);
-          return res.status(201).send({ token, message: 'User created successfully' });
-        });
-      });
-    } catch (error) {
-      if (error.routine === '_bt_check_unique') {
-        return res.status(400).send({ message: 'User with that EMAIL already exist' });
-      }
-      return res.status(400).send(error);
-    }
+       client.query(qryCreateUser, values, (error, result) => {
+         done();
+         if(error.routine === '_bt_check_unique') {
+           return res.status(400).send({ message: 'User with that EMAIL already exist' });
+         }
+         const token = Helper.generateToken(result.rows[0].user_id);
+         return res.status(201).send({ token, message: 'User created successfully' });
+       });
+     });
+   } catch (error) {
+     return res.status(400).send(error);
+   }
+ }
   }
 }
 export default userController;
