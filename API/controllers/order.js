@@ -23,8 +23,7 @@ class orderController {
                     }
                     if(!result.rows[0]) {
                         return res.status(404).send({status: 404, message: 'Cannot find Car with such ID'} );
-                    }      
-                     
+                    }                          
                     const qryCreateOrder = `INSERT INTO orders(car_id, status, price, price_offered) VALUES($1, $2, $3, $4) RETURNING *`
                     const values = [
                         result.rows[0].id,
