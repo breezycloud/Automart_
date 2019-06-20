@@ -15,7 +15,7 @@ describe('User Test', () => {
       email: 'aminualee13@gmail.com',
       password: 'musa',
     };
-    it('should be able to create new user', async () => {
+    it('should be able to create new user', (done) => {
       chai.request(app)
         .post('/api/v1/auth/signup')
         .set('Content-Type', 'application/json')
@@ -24,6 +24,7 @@ describe('User Test', () => {
         .end((err, res) => {
           expect(201);
         });
+        done();
     });
   });
   describe('GET request: user login', () => {

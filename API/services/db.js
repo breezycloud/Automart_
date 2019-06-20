@@ -12,27 +12,31 @@ const con = {
   idleTimeoutMillis: 30000,
 };
 
-const pool = new pg.Pool(con);
+const pool = new pg.Pool({
+  connectionString: process.env.Con
+});
 
 pool.on('connect', () => {
   console.log('connected to the Database');
 });
 
 const dropTables = () => {
-    const qryDrop = `DROP TABLE IF EXISTS users, orders, cars`;
-    pool.query(qryDrop)
-      .then((res) => {
-        console.log(res);
-        pool.end();
-      })
-      .catch((err) => {
-        console.log(err);
-        pool.end();
-      });
-  };
+  const qryDrop = 'DROP TABLE IF EXISTS author user';
+  pool.query(qryDrop)
+    .then((res) => {
+      console.log(res);
+      pool.end();
+    })
+    .catch((err) => {
+      console.log(err);
+      pool.end();
+    });
+};
+
 
 const createTables = () => {
-  const qryTables = `CREATE TABLE users(
+  const qryTables = `CREATE TABLE IF NOT EXISTS
+        users(
             user_id uuid NOT NULL,
             first_name character varying(50) NOT NULL,
             last_name character varying(50) NOT NULL,
@@ -42,7 +46,7 @@ const createTables = () => {
             isBuyer bit DEFAULT 0 NOT NULL,
             isSeller bit DEFAULT false NOT NULL,
             CONSTRAINT user_unique UNIQUE (user_id)
-        );`
+        )`;
   pool.query(qryTables)
     .then((res) => {
       console.log(res);
@@ -54,17 +58,12 @@ const createTables = () => {
     });
 };
 
-pool.on('remove', () => {
-  console.log('client removed');
-  process.exit(0);
-});
-
 
 // export pool and createTables to be accessible  from an where within the application
 module.exports = {
-    dropTables,
-    createTables,
-    pool,
+  dropTables,
+  createTables,
+  pool,
 };
 
 require('make-runnable');

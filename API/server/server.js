@@ -20,8 +20,12 @@ app.post('/api/v1/order', Auth.verifyToken, orderController.createOrder);
 app.patch('/api/v1/order/:id/price', Auth.verifyToken, orderController.updatePurhcaseOrder)
 
 
-app.use('*', (req, res) => res.status(200).json({
+/* app.use('*', (req, res) => res.status(200).json({
   message: 'Welcome Breezy Cloud',
+})); */
+
+app.use('*', (req, res) => res.status(404).json({
+  message: 'Route not found, please enter the correct link and continue'
 }));
 
 app.listen(port, () => {

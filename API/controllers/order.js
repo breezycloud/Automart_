@@ -74,16 +74,23 @@ class orderController {
                     }
                     try {
                         pool.connect((err, client, done) => { 
-                            const query = "UPDATE orders SET price_offered=$1 WHERE id=$2 AND status = 'available' RETURNING id, car_id, status, price, price_offered";
+                            const query = "UPDATE orders SET price_offered=$1 WHERE id=$2 AND status = 'Available' RETURNING id, car_id, status, price, price_offered";
                             const values = [data.price_offered, req.params.id];
                             client.query(query, values, (error, result) => {
                                 done();
                                 if (error) {
                                     res.status(400).json({ status: 400, message: error });
                                 }
-                                return res.status(200).send({ 
+                                return res.status(200).json({ 
                                     status: 200, 
-                                    message: 'Order successfully updated' 
+                                    message: 'Order successfully updated',
+                                    data: {
+                                        id: result.rows[0].id,
+                                        car_id: result.rows[0].car_id,
+                                        status: result.rows[0].status,
+                                        old_price_offered: result.rows[0].price,
+                                        new_price_offered: result.rows[0].price_offered
+                                    }
                                 });
                             });
                         });
