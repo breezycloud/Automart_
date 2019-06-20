@@ -12,8 +12,6 @@ services:
 before_script:
   - psql -c "CREATE DATABASE andela_test;" -U postgres
   - psql -c "CREATE USER andela WITH PASSWORD 'andela123';" -U postgres
-  - npm run drop
-  - npm run create
   - npm run build
 script:
   - npm run test

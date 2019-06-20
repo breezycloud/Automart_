@@ -5,7 +5,7 @@ dotenv.config();
 
 const con = {
   user: 'andela', // this is the db user credential
-  database: 'automart_db',
+  database: 'automart_test',
   password: 'andela123',
   port: 5432,
   max: 10, // max number of clients in the pool
@@ -31,8 +31,10 @@ const dropTables = () => {
       });
   };
 
+
 const createTables = () => {
-  const qryTables = `CREATE TABLE users(
+  const qryTables = `CREATE TABLE IF NOT EXISTS
+        users(
             user_id uuid NOT NULL,
             first_name character varying(50) NOT NULL,
             last_name character varying(50) NOT NULL,
@@ -42,7 +44,7 @@ const createTables = () => {
             isBuyer bit DEFAULT 0 NOT NULL,
             isSeller bit DEFAULT false NOT NULL,
             CONSTRAINT user_unique UNIQUE (user_id)
-        );`
+        )`;
   pool.query(qryTables)
     .then((res) => {
       console.log(res);

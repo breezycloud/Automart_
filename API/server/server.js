@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import userController from '../controllers/user';
 import carController from '../controllers/car';
+import orderController from '../controllers/order';
 import Auth from '../middlewares/Auth';
 
 
@@ -15,6 +16,8 @@ app.use(bodyParser.json());
 app.post('/api/v1/auth/signup', userController.createUser);
 app.get('/api/v1/auth/login', userController.userLogin);
 app.post('/api/v1/car', Auth.verifyToken, carController.postNewAd)
+app.post('/api/v1/order', Auth.verifyToken, orderController.createOrder);
+app.patch('/api/v1/order/:id/price', Auth.verifyToken, orderController.updatePurhcaseOrder)
 
 
 app.use('*', (req, res) => res.status(200).json({
