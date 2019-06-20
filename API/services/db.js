@@ -19,7 +19,8 @@ pool.on('connect', () => {
 });
 
 const dropTables = () => {
-    const qryDrop = `DROP TABLE IF EXISTS author user`;
+
+    const qryDrop = `DROP TABLE IF EXISTS user`;
     pool.query(qryDrop)
       .then((res) => {
         console.log(res);
@@ -30,6 +31,7 @@ const dropTables = () => {
         pool.end();
       });
   };
+
 
 
 const createTables = () => {

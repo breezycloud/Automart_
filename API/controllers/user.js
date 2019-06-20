@@ -15,7 +15,6 @@ class userController {
     }
 
     const hashPassword = Helper.hashPassword(req.body.password);
-    console.log('check encryption', hashPassword);
 
     const qryCreateUser = `INSERT INTO users(user_id, first_name, last_name, email, pwd) 
         VALUES($1, $2, $3, $4, $5) RETURNING user_id`;
@@ -35,6 +34,7 @@ class userController {
             res.status(400).json({ status: 400, message: error });
           }
           const token = Helper.generateToken(result.rows[0].user_id);
+          const token = Helper.generateToken(result.rows[0]);
           return res.status(201).send({ token, message: 'User created successfully' });
         });
       });
@@ -45,6 +45,7 @@ class userController {
       return res.status(400).send(error);
     }
   }
+
   static async userLogin(req, res) {
     if (!req.body.email || !req.body.password) {
       return res.status(400).send({ message: 'Some values are missing'});
