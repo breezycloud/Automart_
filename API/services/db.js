@@ -12,24 +12,26 @@ const con = {
   idleTimeoutMillis: 30000,
 };
 
-const pool = new pg.Pool(con);
+const pool = new pg.Pool({
+  connectionString: process.env.Con
+});
 
 pool.on('connect', () => {
   console.log('connected to the Database');
 });
 
 const dropTables = () => {
-    const qryDrop = `DROP TABLE IF EXISTS author user`;
-    pool.query(qryDrop)
-      .then((res) => {
-        console.log(res);
-        pool.end();
-      })
-      .catch((err) => {
-        console.log(err);
-        pool.end();
-      });
-  };
+  const qryDrop = 'DROP TABLE IF EXISTS author user';
+  pool.query(qryDrop)
+    .then((res) => {
+      console.log(res);
+      pool.end();
+    })
+    .catch((err) => {
+      console.log(err);
+      pool.end();
+    });
+};
 
 
 const createTables = () => {
@@ -56,17 +58,12 @@ const createTables = () => {
     });
 };
 
-pool.on('remove', () => {
-  console.log('client removed');
-  process.exit(0);
-});
-
 
 // export pool and createTables to be accessible  from an where within the application
 module.exports = {
-    dropTables,
-    createTables,
-    pool,
+  dropTables,
+  createTables,
+  pool,
 };
 
 require('make-runnable');
