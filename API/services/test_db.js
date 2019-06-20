@@ -5,33 +5,31 @@ dotenv.config();
 
 const con = {
   user: 'andela', // this is the db user credential
-  database: 'automart_db',
+  database: 'automart_test',
   password: 'andela123',
   port: 5432,
   max: 10, // max number of clients in the pool
   idleTimeoutMillis: 30000,
 };
 
-const pool = new pg.Pool({
-  connectionString: process.env.Con
-});
+const pool = new pg.Pool(con);
 
 pool.on('connect', () => {
   console.log('connected to the Database');
 });
 
 const dropTables = () => {
-  const qryDrop = 'DROP TABLE IF EXISTS author user';
-  pool.query(qryDrop)
-    .then((res) => {
-      console.log(res);
-      pool.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
-};
+    const qryDrop = `DROP TABLE IF EXISTS users, orders, cars`;
+    pool.query(qryDrop)
+      .then((res) => {
+        console.log(res);
+        pool.end();
+      })
+      .catch((err) => {
+        console.log(err);
+        pool.end();
+      });
+  };
 
 
 const createTables = () => {
@@ -58,12 +56,17 @@ const createTables = () => {
     });
 };
 
+pool.on('remove', () => {
+  console.log('client removed');
+  process.exit(0);
+});
+
 
 // export pool and createTables to be accessible  from an where within the application
 module.exports = {
-  dropTables,
-  createTables,
-  pool,
+    dropTables,
+    createTables,
+    pool,
 };
 
 require('make-runnable');
