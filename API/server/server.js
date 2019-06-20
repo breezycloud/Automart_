@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 
 app.post('/api/v1/auth/signup', userController.createUser);
 
-app.use('*', (req, res) => res.status(200).json({
-  message: 'Welcome Breezy Cloud',
+app.use('*', (req, res) => res.status(404).json({
+  message: 'Route not found, Please enter the correction link to continue',
 }));
 
 app.listen(port, () => {

@@ -12,7 +12,9 @@ const con = {
   idleTimeoutMillis: 30000,
 };
 
-const pool = new pg.Pool(con);
+const pool = new pg.Pool({
+  connectionString: process.env.Con
+});
 
 pool.on('connect', () => {
   console.log('connected to the Database');
@@ -55,11 +57,6 @@ const createTables = () => {
       pool.end();
     });
 };
-
-pool.on('remove', () => {
-  console.log('client removed');
-  process.exit(0);
-});
 
 
 // export pool and createTables to be accessible  from an where within the application

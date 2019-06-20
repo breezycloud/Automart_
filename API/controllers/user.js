@@ -40,6 +40,5 @@ class userController {
      return res.status(400).send(error);
    }
  }
-  }
 }
 export default userController;
