@@ -24,24 +24,23 @@ describe('User Test', () => {
         .end((err, res) => {
           expect(201);
         });
-        done();
+      done();
     });
   });
   describe('GET request: user login', () => {
     const userCredentials = {
       email: 'aminuali13@gmail.com',
-      password: 'aminu'
+      password: 'aminu',
     };
     it('registered user should be able to login', async () => {
       chai.request(app)
-      .get('/api/v1/auth/login')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(userCredentials)
-      .end((err, res) => {
-        expect(200);
-      });
-    })
-
-  })
+        .get('/api/v1/auth/login')
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .send(userCredentials)
+        .end((err, res) => {
+          expect(200);
+        });
+    });
+  });
 });
