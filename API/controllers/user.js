@@ -15,7 +15,6 @@ class userController {
     }
 
     const hashPassword = Helper.hashPassword(req.body.password);
-    console.log('check encryption', hashPassword);
 
     const qryCreateUser = `INSERT INTO users(user_id, first_name, last_name, email, pwd) 
         VALUES($1, $2, $3, $4, $5) RETURNING user_id`;
