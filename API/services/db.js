@@ -13,7 +13,7 @@ const con = {
 };
 
 const pool = new pg.Pool({
-  connectionString: process.env.Con
+  connectionString: process.env.Con,
 });
 
 pool.on('connect', () => {

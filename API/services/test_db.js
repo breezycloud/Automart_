@@ -19,17 +19,17 @@ pool.on('connect', () => {
 });
 
 const dropTables = () => {
-    const qryDrop = `DROP TABLE IF EXISTS users, orders, cars`;
-    pool.query(qryDrop)
-      .then((res) => {
-        console.log(res);
-        pool.end();
-      })
-      .catch((err) => {
-        console.log(err);
-        pool.end();
-      });
-  };
+  const qryDrop = 'DROP TABLE IF EXISTS users, orders, cars';
+  pool.query(qryDrop)
+    .then((res) => {
+      console.log(res);
+      pool.end();
+    })
+    .catch((err) => {
+      console.log(err);
+      pool.end();
+    });
+};
 
 
 const createTables = () => {
@@ -64,9 +64,9 @@ pool.on('remove', () => {
 
 // export pool and createTables to be accessible  from an where within the application
 module.exports = {
-    dropTables,
-    createTables,
-    pool,
+  dropTables,
+  createTables,
+  pool,
 };
 
 require('make-runnable');
