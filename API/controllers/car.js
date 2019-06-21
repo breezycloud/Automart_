@@ -104,6 +104,39 @@ class carController {
       return res.status(400).send(error);
     }
   }
+  static async viewSpecificCar(req, res) {
+    try {
+      await pool.connect((err, client, done) => {
+        const qryGetCar = 'SELECT * FROM cars WHERE id=$1';
+        client.query(qryGetCar, [req.params.id], (error, result) => {
+          if(error) {
+            return res.status(400).json({status: 400, message: error});            
+          }
+          if(!result.rows[0]) {
+            return res.state(404).json({status: 404, message: 'Car not found, Enter a valid car id'});
+          }
+          return res.status(200).json({
+            status: 200,
+            data: {
+              id: result.rows[0].id,
+              owner_id: result.rows[0].owner_id,
+              created_on: result.rows[0].created_on,
+              state: result.rows[0].state,
+              status: result.rows[0].status,
+              price: result.rows[0].price, 
+              manufacturer: result.rows[0].manufacturer,
+              model: result.rows[0].model,     
+              body_type: result.rows[0].body_type,                   
+            }
+          });
+        });
+      });
+    }
+    catch(error) {
+      return res.status(400).send(error);
+    }
+ 
+  }
 }
 
 export default carController;

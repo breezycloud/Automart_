@@ -17,6 +17,7 @@ app.post('/api/v1/auth/signup', userController.createUser);
 app.get('/api/v1/auth/login', userController.userLogin);
 app.post('/api/v1/car', Auth.verifyToken, carController.postNewAd);
 app.patch('/api/v1/car/:id/price', Auth.verifyToken, carController.updateCar);
+app.get('/api/v1/car/:id/', Auth.verifyToken, carController.viewSpecificCar);
 app.post('/api/v1/order', Auth.verifyToken, orderController.createOrder);
 app.patch('/api/v1/order/:id/price', Auth.verifyToken, orderController.updatePurhcaseOrder);
 
