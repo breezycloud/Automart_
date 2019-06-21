@@ -52,6 +52,7 @@ class orderController {
             return res.status(400).send(error);
         }
     }
+
     static async updatePurhcaseOrder(req, res) {
         if(!req.body.newPrice) {
             return res.status(400).send({ message: 'Please enter the car price'});

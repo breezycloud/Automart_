@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node --presets @babel/preset-env  ./server/server",
     "build": "rm -rf ./build && babel -d ../build ./API -s",
-    "test": "npm run drop && npm run create && nyc --reporter=html --reporter=text mocha --require @babel/register ../API/Test/user.js --exit",
+    "test": "npm run drop && npm run create && nyc --reporter=html --reporter=text mocha --require @babel/register ../API/Test/ --exit",
     "create": "node ../API/services/db createTables",
     "drop": "node ../API/services/db dropTables",
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
