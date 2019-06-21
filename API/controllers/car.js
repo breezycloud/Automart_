@@ -135,7 +135,26 @@ class carController {
     catch(error) {
       return res.status(400).send(error);
     }
- 
+  }
+  static async viewAllUnsoldCars(req, res){
+    try {       
+      await pool.connect((err, client, done) => {
+        const qryGetCar = 'SELECT * FROM cars WHERE status=$1 ORDER BY ID ASC';        
+        client.query(qryGetCar, [req.params.status], (error, result) => {
+          done();
+          if(!result.rows[0]) {
+            return res.status(404).json({status: 404, message: 'No car found with such status'});
+          }
+          return res.status(200).json({
+            status: 200,
+            data: result.rows
+          });
+        });
+      });
+    }
+    catch(error) {
+      return res.status(400).send(error);
+    }
   }
 }
 
