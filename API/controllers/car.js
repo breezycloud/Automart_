@@ -19,6 +19,9 @@ class carController {
     if(!req.body.status){
         return res.status(400).send({ message: 'Please provide car status' });
     }
+    if(!req.body.status != 'Available' && req.body.status != 'available') {
+      return res.status(400).send({ message: 'Car status should only be Available' });
+    }
 
     const qryCreateAd = `INSERT INTO cars(owner_id, manufacturer, model, body_type, state, status, price) 
         VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
