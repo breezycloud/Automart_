@@ -23,8 +23,7 @@ class orderController {
                     }
                     if(!result.rows[0]) {
                         return res.status(404).send({status: 404, message: 'Cannot find Car with such ID'} );
-                    }      
-                     
+                    }                          
                     const qryCreateOrder = `INSERT INTO orders(car_id, status, price, price_offered) VALUES($1, $2, $3, $4) RETURNING *`
                     const values = [
                         result.rows[0].id,
@@ -53,6 +52,60 @@ class orderController {
             return res.status(400).send(error);
         }
     }
+
+    static async updatePurhcaseOrder(req, res) {
+        if(!req.body.newPrice) {
+            return res.status(400).send({ message: 'Please enter the car price'});
+        }
+        const id = parseInt(req.params.id);
+        const data = {
+            price_offered: req.body.newPrice,
+        };
+        try {
+            await pool.connect((err, client, done) => {
+                const qrySearchID = 'SELECT * FROM orders WHERE id=$1';
+                console.log('order id: ' [req.params.id]);
+                client.query(qrySearchID, [req.params.id], (error, result) => {
+                    done();
+                    if(error) {
+                        res.status(400).json({ status: 400, message: error });
+                    }
+                    if(!result.rows[0]) {
+                        return res.status(404).json({ status: 404, message: 'Order ID not found '});
+                    }
+                    try {
+                        pool.connect((err, client, done) => { 
+                            const query = "UPDATE orders SET price_offered=$1 WHERE id=$2 AND status = 'Available' RETURNING id, car_id, status, price, price_offered";
+                            const values = [data.price_offered, req.params.id];
+                            client.query(query, values, (error, result) => {
+                                done();
+                                if (error) {
+                                    res.status(400).json({ status: 400, message: error });
+                                }
+                                return res.status(200).json({ 
+                                    status: 200, 
+                                    message: 'Order successfully updated',
+                                    data: {
+                                        id: result.rows[0].id,
+                                        car_id: result.rows[0].car_id,
+                                        status: result.rows[0].status,
+                                        old_price_offered: result.rows[0].price,
+                                        new_price_offered: result.rows[0].price_offered
+                                    }
+                                });
+                            });
+                        });
+                    } 
+                    catch(error) {
+                        return res.status(400).send(error);
+                    }                   
+                });                
+            });
+            
+        } catch (error) {
+            return res.status(400).send(error);
+        } 
+    }   
 }
 
 export default orderController;

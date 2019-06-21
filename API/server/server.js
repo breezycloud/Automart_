@@ -17,10 +17,16 @@ app.use(bodyParser.json());
 app.post('/api/v1/auth/signup', userController.createUser);
 app.get('/api/v1/auth/login', userController.userLogin);
 app.post('/api/v1/car', Auth.verifyToken, carController.postNewAd)
-app.post('/api/v1/order',  orderController.createOrder);
+app.post('/api/v1/order', Auth.verifyToken, orderController.createOrder);
+app.patch('/api/v1/order/:id/price', Auth.verifyToken, orderController.updatePurhcaseOrder)
+
+
+/* app.use('*', (req, res) => res.status(200).json({
+  message: 'Welcome Breezy Cloud',
+})); */
 
 app.use('*', (req, res) => res.status(404).json({
-  message: 'Route not found,Please the enter the correct link to continue'
+  message: 'Route not found, please enter the correct link and continue'
 }));
 
 app.listen(port, () => {

@@ -30,14 +30,14 @@ class userController {
        await pool.connect((err, client, done) => {
         client.query(qryCreateUser, values, (error, result) => {
           done();
-          if (error.routine === '_bt_check_unique') {
+          if(error.routine === '_bt_check_unique') {
             return res.status(400).send({ message: 'User with that EMAIL already exist' });
           }
           const token = Helper.generateToken(result.rows[0].user_id);
           return res.status(201).send({ token, message: 'User created successfully' });
         });
       });
-    } catch (error) {      
+    } catch (error) {
       return res.status(400).send(error);
     }
   }
